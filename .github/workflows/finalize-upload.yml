@@ -1,0 +1,47 @@
+name: Finalize GIS tool upload
+
+on:
+  push:
+    paths:
+      - '.github/workflows/finalize-upload.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct uploaded files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          HTML='多边形坐标生成工具.html'
+          EXE='点位坐标转换工具.exe'
+
+          : > "$HTML"
+          for f in .upload/html/part_*; do
+            base64 -d "$f" | xz -dc >> "$HTML"
+          done
+
+          : > "$EXE"
+          for f in .upload/exe/part_*; do
+            base64 -d "$f" | xz -dc >> "$EXE"
+          done
+
+          echo "fd1ab0fcf51e1325c53bea012fc23dfcf4cbf9cf0a948455cc221ff45c96077b  $HTML" | sha256sum -c -
+          echo "004edafe19c045ffc36e6d6badffd5b5f80cbe002b1d97b0ec19288a2230a592  $EXE" | sha256sum -c -
+
+          rm -rf .upload .upload2
+          rm -f .github/workflows/finalize-upload.yml
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: add GIS tools"
+          git push
