@@ -21,16 +21,20 @@ jobs:
         run: |
           set -euo pipefail
 
+          STAGED_COMMIT='6eead4b0a4eb4d209d5211be215324b75da1165e'
           HTML='多边形坐标生成工具.html'
           EXE='点位坐标转换工具.exe'
 
+          mkdir -p /tmp/staged
+          git archive "$STAGED_COMMIT" .upload | tar -x -C /tmp/staged
+
           : > "$HTML"
-          for f in .upload/html/part_*; do
+          for f in /tmp/staged/.upload/html/part_*; do
             base64 -d "$f" | xz -dc >> "$HTML"
           done
 
           : > "$EXE"
-          for f in .upload/exe/part_*; do
+          for f in /tmp/staged/.upload/exe/part_*; do
             base64 -d "$f" | xz -dc >> "$EXE"
           done
 
