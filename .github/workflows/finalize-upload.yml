@@ -28,15 +28,8 @@ jobs:
           mkdir -p /tmp/staged
           git archive "$STAGED_COMMIT" .upload | tar -x -C /tmp/staged
 
-          : > "$HTML"
-          for f in /tmp/staged/.upload/html/part_*; do
-            base64 -d "$f" | xz -dc >> "$HTML"
-          done
-
-          : > "$EXE"
-          for f in /tmp/staged/.upload/exe/part_*; do
-            base64 -d "$f" | xz -dc >> "$EXE"
-          done
+          cat /tmp/staged/.upload/html/part_* | base64 -d | xz -dc > "$HTML"
+          cat /tmp/staged/.upload/exe/part_*  | base64 -d | xz -dc > "$EXE"
 
           echo "fd1ab0fcf51e1325c53bea012fc23dfcf4cbf9cf0a948455cc221ff45c96077b  $HTML" | sha256sum -c -
           echo "004edafe19c045ffc36e6d6badffd5b5f80cbe002b1d97b0ec19288a2230a592  $EXE" | sha256sum -c -
