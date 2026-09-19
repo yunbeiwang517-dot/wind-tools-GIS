@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>批量图形坐标生成工具 V1.7</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#1f2937;--muted:#667085;--line:#d7dee8;--primary:#1967d2;--primary2:#0f4fa8;--ok:#08783e;--warn:#a35d00;--danger:#b42318;--shadow:0 8px 24px rgba(30,50,80,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","Segoe UI",Arial,sans-serif;font-size:14px}.app{max-width:1480px;margin:0 auto;padding:18px}.hero{background:linear-gradient(120deg,#174ea6,#2b76d2);color:#fff;border-radius:14px;padding:20px 24px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:16px}.hero h1{margin:0 0 6px;font-size:24px}.hero p{margin:0;opacity:.92}.grid{display:grid;grid-template-columns:380px 1fr;gap:16px;margin-top:16px}.card{background:var(--card);border:1px solid #e3e8ef;border-radius:12px;box-shadow:var(--shadow);overflow:hidden}.card-title{padding:13px 16px;border-bottom:1px solid var(--line);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between}.card-body{padding:15px}.settings{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.wide{grid-column:1/-1}.field label{font-weight:600;color:#344054}.field small{color:var(--muted);line-height:1.45}input,select,button{font:inherit}input[type=text],input[type=number],select{width:100%;height:36px;border:1px solid #cbd5e1;border-radius:7px;padding:0 9px;background:#fff;color:var(--text);outline:none}input:focus,select:focus{border-color:#74a5e8;box-shadow:0 0 0 3px rgba(25,103,210,.12)}.checkline{display:flex;align-items:center;gap:8px;color:#344054}.checkline input{width:16px;height:16px}.note{margin-top:14px;padding:11px 12px;background:#f8fafc;border-left:4px solid #76a7e7;border-radius:5px;color:#475467;line-height:1.65}.actions{display:flex;flex-wrap:wrap;gap:8px}.btn{border:1px solid #cbd5e1;background:#fff;color:#344054;border-radius:7px;padding:8px 12px;cursor:pointer;font-weight:600}.btn:hover{background:#f5f7fa}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn.primary:hover{background:var(--primary2)}.btn.success{background:#0b7a45;border-color:#0b7a45;color:#fff}.btn.danger{color:var(--danger)}.file-label{display:inline-flex;align-items:center}.file-label input{display:none}.drop-zone{margin:0 0 10px;padding:10px 14px;border:1.5px dashed #a9bbd1;border-radius:8px;background:#f8fbff;color:#667085;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;transition:.18s;user-select:none}.drop-zone b{color:#344054}.drop-zone .drop-icon{font-size:19px;color:#1967d2}.drop-zone.drag-active{border-color:#1967d2;background:#edf5ff;box-shadow:0 0 0 3px rgba(25,103,210,.10);color:#344054}.input-card.drag-active{box-shadow:0 0 0 3px rgba(25,103,210,.14),var(--shadow)}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:8px;max-height:430px}.data-table{width:100%;border-collapse:separate;border-spacing:0;min-width:680px}.data-table th{position:sticky;top:0;z-index:2;background:#edf3fb;color:#344054;font-weight:700;border-bottom:1px solid var(--line);padding:8px;text-align:center;white-space:nowrap}.data-table td{border-bottom:1px solid #e9edf3;border-right:1px solid #eef1f5;padding:0;background:#fff}.data-table td:first-child{text-align:center;color:#667085;width:42px;background:#fafbfc}.data-table input,.data-table select{border:0;border-radius:0;height:34px;box-shadow:none}.data-table input:focus,.data-table select:focus{outline:2px solid #76a7e7;outline-offset:-2px}.data-table .name{min-width:130px}.data-table .coord{min-width:210px}.data-table .del{width:44px;text-align:center}.icon-btn{border:0;background:transparent;color:#98a2b3;cursor:pointer;font-size:18px;line-height:1}.icon-btn:hover{color:var(--danger)}.toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}.help{color:var(--muted)}.statusbar{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;margin-top:16px}.stat{background:#fff;border:1px solid var(--line);border-radius:9px;padding:12px}.stat b{display:block;font-size:21px;margin-top:3px}.stat span{color:var(--muted)}.result-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:16px}.preview{height:380px;border:1px solid var(--line);border-radius:8px;background:#fbfcfe;position:relative;overflow:hidden}.preview canvas{width:100%;height:100%;display:block}.empty-tip{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#98a2b3;pointer-events:none}.result-table-wrap{max-height:380px;overflow:auto;border:1px solid var(--line);border-radius:8px}.result-table{width:100%;border-collapse:collapse;min-width:780px;font-variant-numeric:tabular-nums}.result-table th{position:sticky;top:0;background:#edf3fb;border-bottom:1px solid var(--line);padding:8px;white-space:nowrap}.result-table td{border-bottom:1px solid #edf0f4;padding:7px 8px;text-align:right}.result-table td:nth-child(1),.result-table td:nth-child(2){text-align:left}.export-panel{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.export-panel .actions{justify-content:flex-end}.errorbox{display:none;margin-top:12px;border:1px solid #f1b5b0;background:#fff4f3;color:#8a1c14;border-radius:8px;padding:10px;white-space:pre-wrap;max-height:150px;overflow:auto}.footer{text-align:center;color:#98a2b3;padding:18px 0 4px}.mini{font-size:12px}.toast{position:fixed;right:22px;bottom:22px;background:#101828;color:#fff;padding:11px 15px;border-radius:8px;box-shadow:0 10px 28px rgba(0,0,0,.22);opacity:0;transform:translateY(10px);transition:.22s;pointer-events:none;z-index:99}.toast.show{opacity:1;transform:translateY(0)}.brand-watermark{position:fixed;right:16px;bottom:14px;width:150px;height:auto;opacity:.72;pointer-events:none;user-select:none;z-index:20;border-radius:12px;filter:drop-shadow(0 5px 12px rgba(36,24,24,.18))}
+@media(max-width:980px){.grid,.result-grid{grid-template-columns:1fr}.settings{grid-template-columns:1fr 1fr}.statusbar{grid-template-columns:1fr 1fr}.hero{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.app{padding:9px}.settings{grid-template-columns:1fr}.statusbar{grid-template-columns:1fr 1fr}.hero h1{font-size:20px}.brand-watermark{width:105px;opacity:.58;right:7px;bottom:7px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <div><h1>批量图形坐标生成工具 V1.7</h1><p>支持八边形、正方形、圆形；CSV/TXT/KML/KMZ 点击或拖拽导入，CSV / KMZ / SHP / DXF 导出，并保留点名与边界点编号。</p></div>
+      </section>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-title"><span>参数设置</span><span class="mini help">坐标格式自动识别，无需选择</span></div>
+      <div class="card-body">
+        <div class="settings">
+          <div class="field"><label>国家2000分带</label><select id="zoneType"><option selected>3度带</option><option>6度带</option></select></div>
+          <div class="field"><label>图形类型</label><select id="shapeType"><option selected>八边形</option><option>正方形</option><option>圆形</option></select></div>
+          <div class="field"><label id="distanceLabel">中心到边距离（m）</label><input id="distance" type="number" min="0.01" step="0.01" value="500"></div>
+          <div class="field" id="distanceTypeField"><label>距离定义</label><select id="distanceType"><option selected>中心到边距离</option><option>中心到顶点距离</option></select></div>
+          <div class="field"><label>起始方位角（°）</label><input id="startAzimuth" type="number" step="0.1" value="22.5"><small id="azimuthHint">八边形推荐 22.5°，可自行调整旋转方向。</small></div>
+          <div class="field"><label>KMZ高度（m）</label><input id="altitude" type="number" step="1" value="0"></div>
+          <div class="field"><label>SHP坐标系</label><select id="shpCrs"><option selected>国家2000</option><option>WGS84</option></select><small>国家2000按标准投影坐标写入，不含带号；完整Y坐标仍保存在属性中。</small></div>
+          <div class="field"><label>CAD文字高度（m）</label><input id="dxfTextHeight" type="number" min="0.1" step="1" value="25"></div>
+          <div class="field wide"><label>导出文件名前缀</label><input id="filePrefix" type="text" value="批量图形坐标"></div>
+          <div class="field wide"><label class="checkline"><input id="exportCenterLabels" type="checkbox" checked> 导出中心点名/编号标注</label></div>
+          <div class="field wide"><label class="checkline"><input id="exportVertexLabels" type="checkbox" checked> 导出边界点编号标注（点名-边界点号）</label></div>
+          <div class="field wide"><label class="checkline"><input id="csvSeparator" type="checkbox" checked> 不同图形之间插入空行</label></div>
+          <div class="field wide"><label class="checkline"><input id="csvClose" type="checkbox"> CSV闭合图形（每组末尾重复首点）</label></div>
+        </div>
+        <div class="note"><b>图形规则：</b>八边形固定 8 个顶点，正方形固定 4 个顶点；圆形按 72 个边界点生成，距离直接作为半径。<br><b>自动识别：</b>小数度、度分、度分秒输入“经度、纬度”；国家2000输入“Y、X”。国家2000的 Y 应含带号和 500000 假东，例如 <b>43529940</b>。</div>
+      </div>
+    </section>
+
+    <section class="card input-card" id="inputCard">
+      <div class="card-title"><span>中心点批量输入</span><span class="mini help">可直接从 Excel 复制后粘贴到任意单元格</span></div>
+      <div class="card-body">
+        <div class="toolbar">
+          <div class="actions">
+            <button class="btn" id="addRowsBtn">＋ 添加10行</button>
+            <button class="btn" id="sampleBtn">载入表内示例</button>
+            <label class="btn file-label">导入 CSV/TXT<input id="fileInput" type="file" accept=".csv,.txt,text/csv,text/plain"></label>
+            <label class="btn file-label">导入 KML/KMZ<input id="geoFileInput" type="file" accept=".kml,.kmz,application/vnd.google-earth.kml+xml,application/vnd.google-earth.kmz"></label>
+            <button class="btn danger" id="clearBtn">清空</button>
+          </div>
+          <button class="btn primary" id="calculateBtn">生成全部图形</button>
+        </div>
+        <div class="drop-zone" id="dropZone"><span class="drop-icon">⇩</span><span><b>把文件直接拖到这里</b>　支持 CSV / TXT / KML / KMZ；也可以直接拖到下面表格区域</span></div>
+        <div class="table-wrap"><table class="data-table" id="inputTable"><thead><tr><th>序号</th><th>点名（可空）</th><th>坐标1：经度 / Y</th><th>坐标2：纬度 / X</th><th>删除</th></tr></thead><tbody></tbody></table></div>
+        <div id="errorBox" class="errorbox"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="statusbar">
+    <div class="stat"><span>有效中心点</span><b id="statCenters">0</b></div>
+    <div class="stat"><span>生成边界点</span><b id="statVertices">0</b></div>
+    <div class="stat"><span>中心至边界点距离</span><b id="statRadius">—</b></div>
+    <div class="stat"><span>识别错误</span><b id="statErrors">0</b></div>
+  </div>
+
+  <div class="result-grid">
+    <section class="card">
+      <div class="card-title">计算结果预览</div>
+      <div class="card-body" style="padding:0"><div class="result-table-wrap" style="border:0;border-radius:0"><table class="result-table"><thead><tr><th>点名</th><th>边界点</th><th>经度</th><th>纬度</th><th>国家2000 Y</th><th>国家2000 X</th></tr></thead><tbody id="resultBody"></tbody></table></div></div>
+    </section>
+    <section class="card">
+      <div class="card-title">图形概览</div>
+      <div class="card-body"><div class="preview"><canvas id="previewCanvas"></canvas><div class="empty-tip" id="emptyTip">计算后显示图形</div></div></div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <div class="card-title">直接导出</div>
+    <div class="card-body export-panel">
+      <div class="help">SHP 会打包面图层 + 编号点图层（中心点名、边界点编号）；DXF 会直接写入 CAD TEXT，因此在 CAD 中打开即可看见编号。</div>
+      <div class="actions"><button class="btn success" id="exportDecimalBtn">导出小数度 CSV</button><button class="btn success" id="exportCgcsBtn">导出国家2000 CSV</button><button class="btn primary" id="exportKmzBtn">导出 KMZ</button><button class="btn primary" id="exportShpBtn">导出 SHP</button><button class="btn primary" id="exportDxfBtn">导出 DXF（含编号）</button></div>
+    </div>
+  </section>
+  <div class="footer">♥ 2026 小米的主人 All Rights Reserved</div>
+</div>
+<img class="brand-watermark" src="data:image/webp;base64,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" alt="2026 小米的主人 All Rights Reserved">
+<div id="toast" class="toast"></div>
+<script>
+'use strict';
+const A=6378137.0, INV_F=298.257222101, F=1/INV_F, E2=2*F-F*F, EP2=E2/(1-E2);
+let polygons=[], flatVertices=[], errors=[];
+const $=id=>document.getElementById(id);
+
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function fmtNum(v,d=8){return Number(v).toFixed(d).replace(/\.?0+$/,'');}
+function normalizeText(s){return String(s??'').trim().replace(/，/g,',').replace(/　/g,' ').replace(/[′’]/g,"'").replace(/[″“”]/g,'"').toUpperCase();}
+function parseAngle(value, requested='自动识别'){
+  let s=normalizeText(value); if(!s) throw new Error('坐标为空');
+  const hemi=(s.match(/[NSEW]/)||[''])[0];
+  let sign=/^[\s-]/.test(s)||hemi==='S'||hemi==='W'?-1:1;
+  s=s.replace(/[NSEW]/g,'').trim();
+  let mode=requested||'自动识别';
+  if(mode==='自动识别'){
+    if(/[°]/.test(s) && /["秒]/.test(s)) mode='度分秒';
+    else if(/[°]/.test(s) || /['分]/.test(s)) mode='度分';
+    else mode='小数度';
+  }
+  if(mode==='小数度'){
+    const n=Number(s.replace(/,/g,'').replace(/°/g,'')); if(!Number.isFinite(n)) throw new Error('小数度格式无法识别'); return n;
+  }
+  const nums=s.replace(/,/g,' ').match(/\d+(?:\.\d+)?/g)?.map(Number)||[];
+  if(mode==='度分'){
+    if(nums.length<2) throw new Error('度分应包含“度”和“分”');
+    if(nums[1]>=60) throw new Error('分必须小于60');
+    return sign*(Math.abs(nums[0])+nums[1]/60);
+  }
+  if(mode==='度分秒'){
+    if(nums.length<3) throw new Error('度分秒应包含“度、分、秒”');
+    if(nums[1]>=60||nums[2]>=60) throw new Error('分和秒必须小于60');
+    return sign*(Math.abs(nums[0])+nums[1]/60+nums[2]/3600);
+  }
+  throw new Error('未知坐标格式');
+}
+function detectRowFormat(c1,c2){
+  const a=normalizeText(c1),b=normalizeText(c2);
+  const n1=Number(a.replace(/,/g,'')),n2=Number(b.replace(/,/g,''));
+  if(Number.isFinite(n1)&&Number.isFinite(n2)&&(Math.abs(n1)>1000000||Math.abs(n2)>1000000)) return '国家2000';
+  if(/["秒]/.test(a+b)) return '度分秒';
+  if(/[°'分]/.test(a+b)) return '度分';
+  return '小数度';
+}
+function cgcsToLonLat(Y,X,zoneType){
+  Y=Number(String(Y).replace(/,/g,'')); X=Number(String(X).replace(/,/g,''));
+  if(!Number.isFinite(Y)||!Number.isFinite(X)) throw new Error('国家2000 Y/X 必须是数字');
+  const zone=Math.floor(Y/1000000); if(zone<1||zone>60) throw new Error('无法从Y坐标识别有效带号');
+  const y=Y-zone*1000000-500000;
+  const lon0=zoneType==='3度带'?zone*3:zone*6-3;
+  const e1=(1-Math.sqrt(1-E2))/(1+Math.sqrt(1-E2));
+  const mu=X/(A*(1-E2/4-3*E2**2/64-5*E2**3/256));
+  const phi1=mu+(3*e1/2-27*e1**3/32)*Math.sin(2*mu)+(21*e1**2/16-55*e1**4/32)*Math.sin(4*mu)+(151*e1**3/96)*Math.sin(6*mu)+(1097*e1**4/512)*Math.sin(8*mu);
+  const N1=A/Math.sqrt(1-E2*Math.sin(phi1)**2);
+  const R1=A*(1-E2)/(1-E2*Math.sin(phi1)**2)**1.5;
+  const T1=Math.tan(phi1)**2, C1=EP2*Math.cos(phi1)**2, D=y/N1;
+  const lat=phi1-(N1*Math.tan(phi1)/R1)*(D**2/2-(5+3*T1+10*C1-4*C1**2-9*EP2)*D**4/24+(61+90*T1+298*C1+45*T1**2-252*EP2-3*C1**2)*D**6/720);
+  const lon=lon0*Math.PI/180+(D-(1+2*T1+C1)*D**3/6+(5-2*C1+28*T1-3*C1**2+8*EP2+24*T1**2)*D**5/120)/Math.cos(phi1);
+  return {lon:lon*180/Math.PI,lat:lat*180/Math.PI,zone};
+}
+function lonLatToCgcs(lon,lat,zoneType){
+  const zone=zoneType==='3度带'?Math.floor((lon+1.5)/3):Math.floor(lon/6)+1;
+  const lon0=zoneType==='3度带'?zone*3:zone*6-3;
+  const B=lat*Math.PI/180,l=(lon-lon0)*Math.PI/180;
+  const N=A/Math.sqrt(1-E2*Math.sin(B)**2),t=Math.tan(B),eta2=EP2*Math.cos(B)**2;
+  const M=A*((1-E2/4-3*E2**2/64-5*E2**3/256)*B-(3*E2/8+3*E2**2/32+45*E2**3/1024)*Math.sin(2*B)+(15*E2**2/256+45*E2**3/1024)*Math.sin(4*B)-(35*E2**3/3072)*Math.sin(6*B));
+  const Erel=N*(l*Math.cos(B)+l**3*Math.cos(B)**3*(1-t**2+eta2)/6+l**5*Math.cos(B)**5*(5-18*t**2+t**4+14*eta2-58*t**2*eta2)/120);
+  const X=M+N*t*(l**2*Math.cos(B)**2/2+l**4*Math.cos(B)**4*(5-t**2+9*eta2+4*eta2**2)/24+l**6*Math.cos(B)**6*(61-58*t**2+t**4+270*eta2-330*t**2*eta2)/720);
+  return {Y:zone*1000000+500000+Erel,X,zone};
+}
+function destination(lon,lat,bearingDeg,distance){
+  const phi1=lat*Math.PI/180,lambda1=lon*Math.PI/180,theta=bearingDeg*Math.PI/180,delta=distance/A;
+  const phi2=Math.asin(Math.sin(phi1)*Math.cos(delta)+Math.cos(phi1)*Math.sin(delta)*Math.cos(theta));
+  const lambda2=lambda1+Math.atan2(Math.sin(theta)*Math.sin(delta)*Math.cos(phi1),Math.cos(delta)-Math.sin(phi1)*Math.sin(phi2));
+  return {lon:((lambda2*180/Math.PI+540)%360)-180,lat:phi2*180/Math.PI};
+}
+function parseCenter(row,index){
+  const name=row.name.trim()||`P${index+1}`,c1=row.c1.trim(),c2=row.c2.trim();
+  if(!c1&&!c2) return null; if(!c1||!c2) throw new Error('两个坐标必须同时填写');
+  const format=detectRowFormat(c1,c2); let lon,lat;
+  if(format==='国家2000'){({lon,lat}=cgcsToLonLat(c1,c2,$('zoneType').value));}
+  else {lon=parseAngle(c1,format);lat=parseAngle(c2,format);}
+  if(!Number.isFinite(lon)||lon<-180||lon>180) throw new Error('经度超出 -180～180°');
+  if(!Number.isFinite(lat)||lat<-90||lat>90) throw new Error('纬度超出 -90～90°');
+  return {name,lon,lat,format};
+}
+function getShapeConfig(){
+  const shape=$('shapeType').value,distance=Number($('distance').value),az=Number($('startAzimuth').value);
+  if(!Number.isFinite(distance)||distance<=0) throw new Error('距离必须大于0');
+  if(!Number.isFinite(az)) throw new Error('起始方位角无效');
+  let sides,label,distanceDefinition,radius;
+  if(shape==='正方形'){sides=4;label='正方形';distanceDefinition=$('distanceType').value;radius=distanceDefinition==='中心到边距离'?distance/Math.cos(Math.PI/sides):distance;}
+  else if(shape==='圆形'){sides=72;label='圆形';distanceDefinition='圆形半径';radius=distance;}
+  else{sides=8;label='八边形';distanceDefinition=$('distanceType').value;radius=distanceDefinition==='中心到边距离'?distance/Math.cos(Math.PI/sides):distance;}
+  return {shape:label,sides,distance,az,distanceDefinition,radius};
+}
+function updateShapeUI(setRecommendedAzimuth=false){
+  const shape=$('shapeType').value,isCircle=shape==='圆形';
+  $('distanceType').disabled=isCircle;
+  $('distanceTypeField').style.opacity=isCircle?'.55':'1';
+  $('distanceLabel').textContent=isCircle?'圆形半径（m）':'距离（m）';
+  $('startAzimuth').disabled=isCircle;
+  if(setRecommendedAzimuth){$('startAzimuth').value=shape==='正方形'?'45':shape==='圆形'?'0':'22.5';}
+  $('azimuthHint').textContent=shape==='正方形'?'正方形推荐 45°，可自行调整旋转方向。':shape==='圆形'?'圆形方向无差异，固定按 72 个边界点生成。':'八边形推荐 22.5°，可自行调整旋转方向。';
+}
+function calculate(){
+  polygons=[];flatVertices=[];errors=[];
+  let cfg;try{cfg=getShapeConfig();}catch(e){showToast(e.message);return;}
+  const rows=getInputRows();
+  rows.forEach((r,i)=>{try{const center=parseCenter(r,i);if(!center)return;const vertices=[];for(let j=0;j<cfg.sides;j++){const p=destination(center.lon,center.lat,cfg.az+j*360/cfg.sides,cfg.radius);const cg=lonLatToCgcs(p.lon,p.lat,$('zoneType').value);const v={name:center.name,vertex:j+1,lon:p.lon,lat:p.lat,Y:cg.Y,X:cg.X};vertices.push(v);flatVertices.push(v);}polygons.push({center,vertices,shape:cfg.shape,sides:cfg.sides,distance:cfg.distance,distanceDefinition:cfg.distanceDefinition,radius:cfg.radius});}catch(e){errors.push(`第 ${i+1} 行${r.name.trim()?`（${r.name.trim()}）`:''}：${e.message}`);}});
+  renderResults();drawPreview();updateStats(cfg.radius);saveState();
+  if(polygons.length) showToast(`已生成 ${polygons.length} 个${cfg.shape}`); else showToast('没有可计算的有效点位');
+}
+function updateStats(radius){$('statCenters').textContent=polygons.length;$('statVertices').textContent=flatVertices.length;$('statRadius').textContent=Number.isFinite(radius)?`${fmtNum(radius,3)} m`:'—';$('statErrors').textContent=errors.length;const box=$('errorBox');if(errors.length){box.style.display='block';box.textContent=errors.join('\n');}else{box.style.display='none';box.textContent='';}}
+function renderResults(){const body=$('resultBody');body.innerHTML='';const max=300;flatVertices.slice(0,max).forEach(v=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHtml(v.name)}</td><td>${v.vertex}</td><td>${fmtNum(v.lon,10)}</td><td>${fmtNum(v.lat,10)}</td><td>${fmtNum(v.Y,3)}</td><td>${fmtNum(v.X,3)}</td>`;body.appendChild(tr);});if(flatVertices.length>max){const tr=document.createElement('tr');tr.innerHTML=`<td colspan="6" style="text-align:center;color:#667085">仅预览前 ${max} 行，导出文件包含全部 ${flatVertices.length} 行</td>`;body.appendChild(tr);}}
+function drawPreview(){const canvas=$('previewCanvas'),rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;canvas.width=Math.max(1,rect.width*dpr);canvas.height=Math.max(1,rect.height*dpr);const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,rect.width,rect.height);$('emptyTip').style.display=polygons.length?'none':'flex';if(!polygons.length)return;
+  const pts=flatVertices.map(v=>[v.lon,v.lat]);let minX=Math.min(...pts.map(p=>p[0])),maxX=Math.max(...pts.map(p=>p[0])),minY=Math.min(...pts.map(p=>p[1])),maxY=Math.max(...pts.map(p=>p[1]));if(maxX-minX<1e-9){maxX+=1e-5;minX-=1e-5}if(maxY-minY<1e-9){maxY+=1e-5;minY-=1e-5}const pad=30,scale=Math.min((rect.width-2*pad)/(maxX-minX),(rect.height-2*pad)/(maxY-minY));const map=(x,y)=>[pad+(x-minX)*scale,rect.height-pad-(y-minY)*scale];
+  ctx.lineWidth=1;ctx.strokeStyle='#e6ebf2';for(let i=1;i<5;i++){ctx.beginPath();ctx.moveTo(pad+(rect.width-2*pad)*i/5,pad);ctx.lineTo(pad+(rect.width-2*pad)*i/5,rect.height-pad);ctx.stroke();ctx.beginPath();ctx.moveTo(pad,pad+(rect.height-2*pad)*i/5);ctx.lineTo(rect.width-pad,pad+(rect.height-2*pad)*i/5);ctx.stroke();}
+  polygons.forEach((poly,idx)=>{ctx.beginPath();poly.vertices.forEach((v,j)=>{const [x,y]=map(v.lon,v.lat);j?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath();ctx.fillStyle=`hsla(${(idx*67)%360},68%,52%,.14)`;ctx.strokeStyle=`hsl(${(idx*67)%360},60%,42%)`;ctx.lineWidth=1.6;ctx.fill();ctx.stroke();const [cx,cy]=map(poly.center.lon,poly.center.lat);ctx.fillStyle='#1d2939';ctx.beginPath();ctx.arc(cx,cy,2.5,0,Math.PI*2);ctx.fill();ctx.font='12px Microsoft YaHei';ctx.fillText(poly.center.name,cx+5,cy-5);});}
+function getInputRows(){return [...$('inputTable').tBodies[0].rows].map(tr=>({name:tr.querySelector('.name').value,c1:tr.querySelector('.c1').value,c2:tr.querySelector('.c2').value}));}
+function addRows(n=10,data=[]){const tb=$('inputTable').tBodies[0];for(let k=0;k<n;k++){const d=data[k]||{};const tr=tb.insertRow();tr.innerHTML=`<td class="rownum"></td><td><input class="name" type="text" value="${escapeHtml(d.name||'')}"></td><td><input class="coord c1" type="text" value="${escapeHtml(d.c1||'')}"></td><td><input class="coord c2" type="text" value="${escapeHtml(d.c2||'')}"></td><td class="del"><button class="icon-btn" title="删除本行">×</button></td>`;tr.querySelector('.icon-btn').onclick=()=>{tr.remove();renumber();saveState();};tr.querySelectorAll('input').forEach(el=>el.addEventListener('change',saveState));}renumber();}
+function renumber(){[...$('inputTable').tBodies[0].rows].forEach((tr,i)=>tr.querySelector('.rownum').textContent=i+1);}
+function clearAll(){if(!confirm('确定清空全部输入和计算结果吗？'))return;$('inputTable').tBodies[0].innerHTML='';addRows(12);polygons=[];flatVertices=[];errors=[];renderResults();drawPreview();updateStats(NaN);saveState();}
+function loadSample(){const sample=[{name:'B1',c1:'43529940',c2:'4918845.6'},{name:'B2',c1:'43529753',c2:'4917655.2'},{name:'B3',c1:'43530699',c2:'4918224.3'}];$('inputTable').tBodies[0].innerHTML='';addRows(12,sample);calculate();}
+function handlePaste(e){const t=e.target;if(!t.matches('input'))return;const text=e.clipboardData.getData('text');if(!/[\t\r\n]/.test(text))return;e.preventDefault();const rows=text.replace(/\r/g,'').split('\n').filter((r,i,a)=>!(i===a.length-1&&r==='')).map(r=>r.split('\t'));const tr=t.closest('tr');let startRow=[...tr.parentElement.rows].indexOf(tr);const fields=['name','c1','c2'];let startCol=fields.findIndex(c=>t.classList.contains(c));if(startCol<0)startCol=0;while($('inputTable').tBodies[0].rows.length<startRow+rows.length)addRows(10);rows.forEach((cells,ri)=>cells.forEach((val,ci)=>{const field=fields[startCol+ci];if(!field)return;const row=$('inputTable').tBodies[0].rows[startRow+ri];const el=row.querySelector('.'+field);if(el)el.value=val.trim();}));renumber();saveState();}
+function fillImportedRows(data,sourceLabel='文件'){if(!data.length)throw new Error(`${sourceLabel}中没有识别到可用的中心点坐标`);$('inputTable').tBodies[0].innerHTML='';addRows(Math.max(12,data.length),data);polygons=[];$('resultBody').innerHTML='';$('statCenters').textContent='0';$('statVertices').textContent='0';$('statRadius').textContent='—';drawPreview();showToast(`已从${sourceLabel}导入 ${data.length} 个中心点`);saveState();}
+function importTextFile(file){const reader=new FileReader();reader.onload=()=>{try{const text=String(reader.result).replace(/^\uFEFF/,'');const lines=text.replace(/\r/g,'').split('\n').filter(x=>x.trim());const delim=lines.some(x=>x.includes('\t'))?'\t':',';const parsed=lines.map(line=>parseCsvLine(line,delim));if(parsed.length&&/点名|名称|经度|坐标/i.test(parsed[0].join(' ')))parsed.shift();const data=parsed.map(c=>c.length===2?({name:'',c1:c[0]||'',c2:c[1]||''}):({name:c[0]||'',c1:c[1]||'',c2:c[2]||''})).filter(r=>String(r.c1).trim()&&String(r.c2).trim());fillImportedRows(data,'CSV/TXT');}catch(e){showToast(e.message);}};reader.onerror=()=>showToast('文件读取失败');reader.readAsText(file,'UTF-8');}
+function childByLocalName(el,name){if(!el)return null;const list=el.getElementsByTagNameNS?el.getElementsByTagNameNS('*',name):el.getElementsByTagName(name);return list&&list.length?list[0]:null;}
+function textByLocalName(el,name){const n=childByLocalName(el,name);return n?String(n.textContent||'').trim():'';}
+function cleanKmlName(name){return String(name||'').trim().replace(/\s+(中心)$/,'').replace(/\s+(八边形|正方形|圆形)$/,'').trim();}
+function parseCoordTuple(text){const token=String(text||'').trim().split(/\s+/).find(Boolean);if(!token)return null;const p=token.split(',');if(p.length<2)return null;const lon=Number(p[0]),lat=Number(p[1]);return Number.isFinite(lon)&&Number.isFinite(lat)?{lon,lat}:null;}
+function parseCoordList(text){return String(text||'').trim().split(/\s+/).map(t=>{const p=t.split(',');return p.length>=2?{lon:Number(p[0]),lat:Number(p[1])}:null;}).filter(p=>p&&Number.isFinite(p.lon)&&Number.isFinite(p.lat));}
+function polygonCentroidLonLat(pts){let a=pts.slice();if(a.length>1&&Math.abs(a[0].lon-a[a.length-1].lon)<1e-12&&Math.abs(a[0].lat-a[a.length-1].lat)<1e-12)a=a.slice(0,-1);if(!a.length)return null;if(a.length<3){const n=a.length;return {lon:a.reduce((s,p)=>s+p.lon,0)/n,lat:a.reduce((s,p)=>s+p.lat,0)/n};}let area2=0,cx=0,cy=0;for(let i=0;i<a.length;i++){const p=a[i],q=a[(i+1)%a.length],cross=p.lon*q.lat-q.lon*p.lat;area2+=cross;cx+=(p.lon+q.lon)*cross;cy+=(p.lat+q.lat)*cross;}if(Math.abs(area2)<1e-15){return {lon:a.reduce((s,p)=>s+p.lon,0)/a.length,lat:a.reduce((s,p)=>s+p.lat,0)/a.length};}return {lon:cx/(3*area2),lat:cy/(3*area2)};}
+function extendedDataMap(pm){const out={};const nodes=pm.getElementsByTagNameNS?pm.getElementsByTagNameNS('*','Data'):pm.getElementsByTagName('Data');for(const d of nodes){const key=d.getAttribute('name')||'';const v=childByLocalName(d,'value');if(key)out[key]=v?String(v.textContent||'').trim():'';}return out;}
+function parseKmlCenters(kmlText){const doc=new DOMParser().parseFromString(kmlText,'application/xml');if(doc.getElementsByTagName('parsererror').length)throw new Error('KML格式无法解析');const pms=[...(doc.getElementsByTagNameNS?doc.getElementsByTagNameNS('*','Placemark'):doc.getElementsByTagName('Placemark'))];const pointRows=[];for(const pm of pms){const point=childByLocalName(pm,'Point');if(!point)continue;const c=parseCoordTuple(textByLocalName(point,'coordinates'));if(!c)continue;let name=cleanKmlName(textByLocalName(pm,'name'));pointRows.push({name,c1:fmtNum(c.lon,10),c2:fmtNum(c.lat,10)});}
+  if(pointRows.length){const seen=new Set(),dedup=[];for(let i=0;i<pointRows.length;i++){const r=pointRows[i];const key=`${r.name}|${Number(r.c1).toFixed(8)}|${Number(r.c2).toFixed(8)}`;if(seen.has(key))continue;seen.add(key);if(!r.name)r.name=`点${dedup.length+1}`;dedup.push(r);}return dedup;}
+  const polyRows=[];for(const pm of pms){const poly=childByLocalName(pm,'Polygon');if(!poly)continue;let c=null;const ext=extendedDataMap(pm),lon=Number(ext['中心经度']),lat=Number(ext['中心纬度']);if(Number.isFinite(lon)&&Number.isFinite(lat))c={lon,lat};if(!c){const ring=childByLocalName(poly,'LinearRing'),coords=ring?parseCoordList(textByLocalName(ring,'coordinates')):[];c=polygonCentroidLonLat(coords);}if(!c)continue;let name=cleanKmlName(textByLocalName(pm,'name'));if(!name)name=`点${polyRows.length+1}`;polyRows.push({name,c1:fmtNum(c.lon,10),c2:fmtNum(c.lat,10)});}return polyRows;}
+function findZipEocd(view){const min=Math.max(0,view.byteLength-65557);for(let i=view.byteLength-22;i>=min;i--)if(view.getUint32(i,true)===0x06054b50)return i;return -1;}
+async function inflateRaw(bytes){if(typeof DecompressionStream==='undefined')throw new Error('当前浏览器不支持解压KMZ，请使用新版 Edge/Chrome');let ds;try{ds=new DecompressionStream('deflate-raw');}catch(e){throw new Error('当前浏览器不支持KMZ的Deflate解压');}const stream=new Blob([bytes]).stream().pipeThrough(ds);return new Uint8Array(await new Response(stream).arrayBuffer());}
+async function extractKmlFromKmz(arrayBuffer){const view=new DataView(arrayBuffer),eocd=findZipEocd(view);if(eocd<0)throw new Error('KMZ不是有效的ZIP/KMZ文件');const total=view.getUint16(eocd+10,true),centralOffset=view.getUint32(eocd+16,true),decoder=new TextDecoder('utf-8');let o=centralOffset,candidates=[];for(let i=0;i<total;i++){if(o+46>view.byteLength||view.getUint32(o,true)!==0x02014b50)break;const method=view.getUint16(o+10,true),compSize=view.getUint32(o+20,true),uncompSize=view.getUint32(o+24,true),fnLen=view.getUint16(o+28,true),extraLen=view.getUint16(o+30,true),commentLen=view.getUint16(o+32,true),localOffset=view.getUint32(o+42,true);const fnBytes=new Uint8Array(arrayBuffer,o+46,fnLen),name=decoder.decode(fnBytes);if(/\.kml$/i.test(name))candidates.push({name,method,compSize,uncompSize,localOffset});o+=46+fnLen+extraLen+commentLen;}if(!candidates.length)throw new Error('KMZ中没有找到KML文件');candidates.sort((a,b)=>(/^(doc|index)\.kml$/i.test(a.name.split('/').pop())?-1:0)-(/^(doc|index)\.kml$/i.test(b.name.split('/').pop())?-1:0));const f=candidates[0];if(f.localOffset+30>view.byteLength||view.getUint32(f.localOffset,true)!==0x04034b50)throw new Error('KMZ内部KML记录损坏');const lf=view.getUint16(f.localOffset+26,true),le=view.getUint16(f.localOffset+28,true),start=f.localOffset+30+lf+le,end=start+f.compSize;if(end>view.byteLength)throw new Error('KMZ内部数据不完整');let bytes=new Uint8Array(arrayBuffer,start,f.compSize);if(f.method===8)bytes=await inflateRaw(bytes);else if(f.method!==0)throw new Error(`暂不支持KMZ压缩方式 ${f.method}`);return new TextDecoder('utf-8').decode(bytes);}
+async function importGeoFile(file){try{const ext=(file.name.split('.').pop()||'').toLowerCase();let kmlText;if(ext==='kmz'){kmlText=await extractKmlFromKmz(await file.arrayBuffer());}else if(ext==='kml'){kmlText=(await file.text()).replace(/^\uFEFF/,'');}else throw new Error('请选择 KML 或 KMZ 文件');const data=parseKmlCenters(kmlText);fillImportedRows(data,ext.toUpperCase());}catch(e){showToast(e.message);}}
+async function importAnySupportedFile(file){if(!file)return;const ext=(file.name.split('.').pop()||'').toLowerCase();if(ext==='csv'||ext==='txt'){importTextFile(file);return;}if(ext==='kml'||ext==='kmz'){await importGeoFile(file);return;}throw new Error('不支持该文件类型，请拖入 CSV、TXT、KML 或 KMZ 文件');}
+function hasDraggedFiles(e){return e.dataTransfer&&Array.from(e.dataTransfer.types||[]).includes('Files');}
+function setDropActive(on){const card=$('inputCard'),zone=$('dropZone');if(card)card.classList.toggle('drag-active',on);if(zone)zone.classList.toggle('drag-active',on);}
+let dragDepth=0;
+function setupDragImport(){const card=$('inputCard');if(!card)return;
+  card.addEventListener('dragenter',e=>{if(!hasDraggedFiles(e))return;e.preventDefault();dragDepth++;setDropActive(true);});
+  card.addEventListener('dragover',e=>{if(!hasDraggedFiles(e))return;e.preventDefault();e.dataTransfer.dropEffect='copy';setDropActive(true);});
+  card.addEventListener('dragleave',e=>{if(!hasDraggedFiles(e))return;dragDepth=Math.max(0,dragDepth-1);if(!dragDepth)setDropActive(false);});
+  card.addEventListener('drop',async e=>{if(!hasDraggedFiles(e))return;e.preventDefault();e.stopPropagation();dragDepth=0;setDropActive(false);const files=Array.from(e.dataTransfer.files||[]);if(!files.length)return;if(files.length>1)showToast(`检测到 ${files.length} 个文件，将导入第一个文件：${files[0].name}`);try{await importAnySupportedFile(files[0]);}catch(err){showToast(err.message);}});
+  window.addEventListener('dragover',e=>{if(hasDraggedFiles(e))e.preventDefault();});
+  window.addEventListener('drop',e=>{if(hasDraggedFiles(e)){e.preventDefault();setDropActive(false);dragDepth=0;}});
+}
+
+function parseCsvLine(line,delim=','){if(delim==='\t')return line.split('\t');const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++;}else q=!q;}else if(c===','&&!q){out.push(cur);cur='';}else cur+=c;}out.push(cur);return out;}
+function csvEscape(v){const s=String(v);return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function buildCsv(type){if(!polygons.length)calculate();if(!polygons.length)throw new Error('没有可导出的结果');const sep=$('csvSeparator').checked,close=$('csvClose').checked;const lines=[type==='decimal'?'点名,边界点,经度,纬度':'点名,边界点,国家2000 Y,国家2000 X'];polygons.forEach((p,pi)=>{const arr=close?[...p.vertices,p.vertices[0]]:p.vertices;arr.forEach((v,i)=>{const boundaryPoint=i===p.vertices.length?1:v.vertex;lines.push([csvEscape(v.name),boundaryPoint,type==='decimal'?fmtNum(v.lon,10):fmtNum(v.Y,3),type==='decimal'?fmtNum(v.lat,10):fmtNum(v.X,3)].join(','));});if(sep&&pi<polygons.length-1)lines.push('');});return '\uFEFF'+lines.join('\r\n');}
+function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1200);}
+function safePrefix(){return ($('filePrefix').value.trim()||'批量图形坐标').replace(/[\\/:*?"<>|]/g,'_');}
+function exportCsv(type){try{const csv=buildCsv(type);downloadBlob(new Blob([csv],{type:'text/csv;charset=utf-8'}),`${safePrefix()}_${type==='decimal'?'小数度':'国家2000'}.csv`);showToast('CSV已生成');}catch(e){showToast(e.message);}}
+function xmlEscape(s){return String(s).replace(/[<>&'\"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}[c]));}
+function buildKml(){if(!polygons.length)calculate();if(!polygons.length)throw new Error('没有可导出的结果');const alt=Number($('altitude').value)||0;let features='';polygons.forEach((p,i)=>{const coords=[...p.vertices,p.vertices[0]].map(v=>`${fmtNum(v.lon,10)},${fmtNum(v.lat,10)},${alt}`).join(' ');features+=`<Placemark><name>${xmlEscape(p.center.name)} ${xmlEscape(p.shape)}</name><styleUrl>#polygonStyle</styleUrl><ExtendedData><Data name="图形类型"><value>${xmlEscape(p.shape)}</value></Data><Data name="中心经度"><value>${fmtNum(p.center.lon,10)}</value></Data><Data name="中心纬度"><value>${fmtNum(p.center.lat,10)}</value></Data><Data name="边界点数"><value>${p.sides}</value></Data><Data name="输入距离"><value>${p.distance}</value></Data><Data name="距离定义"><value>${xmlEscape(p.distanceDefinition)}</value></Data><Data name="中心至边界点距离"><value>${fmtNum(p.radius,3)}</value></Data></ExtendedData><Polygon><altitudeMode>${alt?'absolute':'clampToGround'}</altitudeMode><outerBoundaryIs><LinearRing><coordinates>${coords}</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>`;features+=`<Placemark><name>${xmlEscape(p.center.name)} 中心</name><styleUrl>#centerStyle</styleUrl><Point><coordinates>${fmtNum(p.center.lon,10)},${fmtNum(p.center.lat,10)},${alt}</coordinates></Point></Placemark>`;});return `<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>${xmlEscape(safePrefix())}</name><Style id="polygonStyle"><LineStyle><color>ffcc6600</color><width>2</width></LineStyle><PolyStyle><color>4dcc6600</color></PolyStyle></Style><Style id="centerStyle"><IconStyle><scale>0.55</scale><Icon><href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href></Icon></IconStyle><LabelStyle><scale>0.8</scale></LabelStyle></Style>${features}</Document></kml>`;}
+const crcTable=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(bytes){let c=0xffffffff;for(const b of bytes)c=crcTable[(c^b)&255]^(c>>>8);return (c^0xffffffff)>>>0;}
+function u16(v){return [v&255,(v>>>8)&255]}function u32(v){return [v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255]}
+function toBytes(data){if(data instanceof Uint8Array)return data;if(data instanceof ArrayBuffer)return new Uint8Array(data);return new TextEncoder().encode(String(data));}
+function zipFiles(files,mime='application/zip'){
+  const now=new Date(),dosTime=((now.getHours()&31)<<11)|((now.getMinutes()&63)<<5)|((Math.floor(now.getSeconds()/2))&31),dosDate=(((now.getFullYear()-1980)&127)<<9)|(((now.getMonth()+1)&15)<<5)|(now.getDate()&31),enc=new TextEncoder();
+  const locals=[],centrals=[];let offset=0;
+  files.forEach(f=>{const name=enc.encode(f.name),data=toBytes(f.data),crc=crc32(data);const local=new Uint8Array([80,75,3,4,...u16(20),...u16(0x0800),...u16(0),...u16(dosTime),...u16(dosDate),...u32(crc),...u32(data.length),...u32(data.length),...u16(name.length),...u16(0),...name,...data]);const central=new Uint8Array([80,75,1,2,...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(dosTime),...u16(dosDate),...u32(crc),...u32(data.length),...u32(data.length),...u16(name.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(offset),...name]);locals.push(local);centrals.push(central);offset+=local.length;});
+  const centralLen=centrals.reduce((a,b)=>a+b.length,0),end=new Uint8Array([80,75,5,6,...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(centralLen),...u32(offset),...u16(0)]);return new Blob([...locals,...centrals,end],{type:mime});
+}
+function zipSingleFile(filename,text){return zipFiles([{name:filename,data:text}],'application/vnd.google-earth.kmz');}
+function exportKmz(){try{const kml=buildKml();downloadBlob(zipSingleFile('doc.kml',kml),`${safePrefix()}.kmz`);showToast('KMZ已生成');}catch(e){showToast(e.message);}}
+
+function shpProjectionInfo(){
+  const crs=$('shpCrs').value;
+  if(crs==='WGS84')return {crs,prj:'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]]',zone:null,xy:(lon,lat)=>({x:lon,y:lat})};
+  const zoneType=$('zoneType').value,zones=new Set(polygons.map(p=>lonLatToCgcs(p.center.lon,p.center.lat,zoneType).zone));if(zones.size!==1)throw new Error('SHP国家2000导出要求所有图形位于同一分带；请拆分导出或改用WGS84。');const zone=[...zones][0],lon0=zoneType==='3度带'?zone*3:zone*6-3;
+  const prj=`PROJCS["CGCS2000_GK_${zoneType}_${zone}",GEOGCS["China Geodetic Coordinate System 2000",DATUM["China_2000",SPHEROID["CGCS2000",6378137,298.257222101]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",${lon0}],PARAMETER["scale_factor",1],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1]]`;
+  return {crs,prj,zone,xy:(lon,lat)=>{const c=lonLatToCgcs(lon,lat,zoneType);if(c.zone!==zone)throw new Error('图形跨分带，无法写入同一国家2000 SHP。');return {x:c.Y-zone*1000000,y:c.X,fullY:c.Y,zone:c.zone};}};
+}
+function bboxOfGeometries(geoms){const xs=[],ys=[];geoms.forEach(g=>g.points.forEach(p=>{xs.push(p.x);ys.push(p.y)}));return {xmin:Math.min(...xs),ymin:Math.min(...ys),xmax:Math.max(...xs),ymax:Math.max(...ys)};}
+function writeShpHeader(view,fileLengthWords,shapeType,b){view.setInt32(0,9994,false);for(let o=4;o<24;o+=4)view.setInt32(o,0,false);view.setInt32(24,fileLengthWords,false);view.setInt32(28,1000,true);view.setInt32(32,shapeType,true);view.setFloat64(36,b.xmin,true);view.setFloat64(44,b.ymin,true);view.setFloat64(52,b.xmax,true);view.setFloat64(60,b.ymax,true);for(let o=68;o<=92;o+=8)view.setFloat64(o,0,true);}
+function buildPolygonShp(geoms){
+  const records=geoms.map(g=>{const pts=g.points,contentBytes=4+32+4+4+4+pts.length*16;return {pts,b:g.bbox||bboxOfGeometries([{points:pts}]),contentBytes};}),shpLen=100+records.reduce((a,r)=>a+8+r.contentBytes,0),shxLen=100+records.length*8,b=bboxOfGeometries(geoms),shp=new ArrayBuffer(shpLen),shx=new ArrayBuffer(shxLen),sv=new DataView(shp),xv=new DataView(shx);writeShpHeader(sv,shpLen/2,5,b);writeShpHeader(xv,shxLen/2,5,b);let so=100,xo=100,wordOffset=50;
+  records.forEach((r,i)=>{sv.setInt32(so,i+1,false);sv.setInt32(so+4,r.contentBytes/2,false);let o=so+8;sv.setInt32(o,5,true);o+=4;sv.setFloat64(o,r.b.xmin,true);sv.setFloat64(o+8,r.b.ymin,true);sv.setFloat64(o+16,r.b.xmax,true);sv.setFloat64(o+24,r.b.ymax,true);o+=32;sv.setInt32(o,1,true);sv.setInt32(o+4,r.pts.length,true);o+=8;sv.setInt32(o,0,true);o+=4;r.pts.forEach(p=>{sv.setFloat64(o,p.x,true);sv.setFloat64(o+8,p.y,true);o+=16;});xv.setInt32(xo,wordOffset,false);xv.setInt32(xo+4,r.contentBytes/2,false);xo+=8;wordOffset+=(8+r.contentBytes)/2;so+=8+r.contentBytes;});return {shp:new Uint8Array(shp),shx:new Uint8Array(shx)};
+}
+function buildPointShp(geoms){const contentBytes=20,shpLen=100+geoms.length*(8+contentBytes),shxLen=100+geoms.length*8,b=bboxOfGeometries(geoms),shp=new ArrayBuffer(shpLen),shx=new ArrayBuffer(shxLen),sv=new DataView(shp),xv=new DataView(shx);writeShpHeader(sv,shpLen/2,1,b);writeShpHeader(xv,shxLen/2,1,b);let so=100,xo=100,wordOffset=50;geoms.forEach((g,i)=>{const p=g.points[0];sv.setInt32(so,i+1,false);sv.setInt32(so+4,contentBytes/2,false);sv.setInt32(so+8,1,true);sv.setFloat64(so+12,p.x,true);sv.setFloat64(so+20,p.y,true);xv.setInt32(xo,wordOffset,false);xv.setInt32(xo+4,contentBytes/2,false);so+=28;xo+=8;wordOffset+=14;});return {shp:new Uint8Array(shp),shx:new Uint8Array(shx)};}
+function byteTruncate(text,max){const enc=new TextEncoder(),bytes=enc.encode(String(text??''));if(bytes.length<=max)return bytes;let s=String(text??'');while(s&&enc.encode(s).length>max)s=s.slice(0,-1);return enc.encode(s);}
+function buildDbf(rows,fields){const enc=new TextEncoder(),headerLen=32+fields.length*32+1,recordLen=1+fields.reduce((a,f)=>a+f.len,0),buf=new Uint8Array(headerLen+recordLen*rows.length+1),view=new DataView(buf.buffer),now=new Date();buf[0]=3;buf[1]=now.getFullYear()-1900;buf[2]=now.getMonth()+1;buf[3]=now.getDate();view.setUint32(4,rows.length,true);view.setUint16(8,headerLen,true);view.setUint16(10,recordLen,true);fields.forEach((f,i)=>{const o=32+i*32,name=enc.encode(f.name.slice(0,10));buf.set(name,o);buf[o+11]=f.type.charCodeAt(0);buf[o+16]=f.len;buf[o+17]=f.dec||0;});buf[headerLen-1]=0x0D;rows.forEach((row,ri)=>{let o=headerLen+ri*recordLen;buf[o++]=0x20;fields.forEach(f=>{let b;if(f.type==='N'){let v=row[f.key];let txt=(v===null||v===undefined||v==='')?'':(f.dec?Number(v).toFixed(f.dec):String(Math.trunc(Number(v))));txt=txt.slice(-f.len).padStart(f.len,' ');b=enc.encode(txt);}else{b=byteTruncate(row[f.key],f.len);const padded=new Uint8Array(f.len);padded.fill(0x20);padded.set(b,0);b=padded;}buf.set(b,o);o+=f.len;});});buf[buf.length-1]=0x1A;return buf;}
+function buildShpPackage(){if(!polygons.length)calculate();if(!polygons.length)throw new Error('没有可导出的结果');const info=shpProjectionInfo(),polyGeoms=[],polyRows=[],labelGeoms=[],labelRows=[];polygons.forEach((p,pi)=>{const centerXY=info.xy(p.center.lon,p.center.lat),pts=p.vertices.map(v=>info.xy(v.lon,v.lat));pts.push({...pts[0]});polyGeoms.push({points:pts});const centerCg=lonLatToCgcs(p.center.lon,p.center.lat,$('zoneType').value);polyRows.push({ID:pi+1,NAME:p.center.name,SHAPE:p.shape,SIDES:p.sides,DIST_M:p.distance,RADIUS_M:p.radius,FULL_Y:centerCg.Y,NORTH_X:centerCg.X,ZONE:centerCg.zone});if($('exportCenterLabels').checked){labelGeoms.push({points:[centerXY]});labelRows.push({LABEL:p.center.name,NAME:p.center.name,VERTEX:0,KIND:'CENTER'});}if($('exportVertexLabels').checked)p.vertices.forEach(v=>{const xy=info.xy(v.lon,v.lat);labelGeoms.push({points:[xy]});labelRows.push({LABEL:`${p.center.name}-${v.vertex}`,NAME:p.center.name,VERTEX:v.vertex,KIND:'VERTEX'});});});
+  const polyBin=buildPolygonShp(polyGeoms),polyDbf=buildDbf(polyRows,[{name:'ID',key:'ID',type:'N',len:8},{name:'NAME',key:'NAME',type:'C',len:80},{name:'SHAPE',key:'SHAPE',type:'C',len:20},{name:'SIDES',key:'SIDES',type:'N',len:6},{name:'DIST_M',key:'DIST_M',type:'N',len:14,dec:3},{name:'RADIUS_M',key:'RADIUS_M',type:'N',len:14,dec:3},{name:'FULL_Y',key:'FULL_Y',type:'N',len:18,dec:3},{name:'NORTH_X',key:'NORTH_X',type:'N',len:18,dec:3},{name:'ZONE',key:'ZONE',type:'N',len:5}]);
+  const files=[{name:'polygons.shp',data:polyBin.shp},{name:'polygons.shx',data:polyBin.shx},{name:'polygons.dbf',data:polyDbf},{name:'polygons.prj',data:info.prj},{name:'polygons.cpg',data:'UTF-8'}];
+  if(labelGeoms.length){const labBin=buildPointShp(labelGeoms),labDbf=buildDbf(labelRows,[{name:'LABEL',key:'LABEL',type:'C',len:100},{name:'NAME',key:'NAME',type:'C',len:80},{name:'VERTEX',key:'VERTEX',type:'N',len:8},{name:'KIND',key:'KIND',type:'C',len:12}]);files.push({name:'labels.shp',data:labBin.shp},{name:'labels.shx',data:labBin.shx},{name:'labels.dbf',data:labDbf},{name:'labels.prj',data:info.prj},{name:'labels.cpg',data:'UTF-8'});}files.push({name:'README.txt',data:`图形面：polygons.shp\r\n编号标注点：labels.shp（如启用）\r\nSHP坐标系：${info.crs}${info.zone?`，分带 ${info.zone}`:''}\r\n国家2000 SHP 使用标准投影Easting，不含百万带号；完整国家2000 Y/X 保存在 polygons.dbf 的 FULL_Y / NORTH_X 字段。\r\n在 GIS/CAD Map 中可使用 labels 图层的 LABEL 字段进行标注。`});return files;}
+function exportShp(){try{const files=buildShpPackage();downloadBlob(zipFiles(files),`${safePrefix()}_SHP.zip`);showToast('SHP压缩包已生成');}catch(e){showToast(e.message);}}
+function dxfPair(code,value){return `${code}\r\n${value}\r\n`;}
+function buildDxf(){if(!polygons.length)calculate();if(!polygons.length)throw new Error('没有可导出的结果');const h=Number($('dxfTextHeight').value);if(!Number.isFinite(h)||h<=0)throw new Error('CAD文字高度必须大于0');let d='';d+=dxfPair(0,'SECTION')+dxfPair(2,'HEADER')+dxfPair(9,'$ACADVER')+dxfPair(1,'AC1021')+dxfPair(9,'$DWGCODEPAGE')+dxfPair(3,'UTF-8')+dxfPair(0,'ENDSEC')+dxfPair(0,'SECTION')+dxfPair(2,'ENTITIES');polygons.forEach(p=>{d+=dxfPair(0,'LWPOLYLINE')+dxfPair(8,'BOUNDARY')+dxfPair(90,p.vertices.length)+dxfPair(70,1);p.vertices.forEach(v=>{d+=dxfPair(10,fmtNum(v.Y,3))+dxfPair(20,fmtNum(v.X,3));});const c=lonLatToCgcs(p.center.lon,p.center.lat,$('zoneType').value);d+=dxfPair(0,'POINT')+dxfPair(8,'CENTER')+dxfPair(10,fmtNum(c.Y,3))+dxfPair(20,fmtNum(c.X,3))+dxfPair(30,0);if($('exportCenterLabels').checked)d+=dxfPair(0,'TEXT')+dxfPair(8,'CENTER_LABEL')+dxfPair(10,fmtNum(c.Y+h*0.4,3))+dxfPair(20,fmtNum(c.X+h*0.4,3))+dxfPair(30,0)+dxfPair(40,fmtNum(h,3))+dxfPair(1,p.center.name)+dxfPair(7,'STANDARD');if($('exportVertexLabels').checked)p.vertices.forEach(v=>{d+=dxfPair(0,'POINT')+dxfPair(8,'VERTEX')+dxfPair(10,fmtNum(v.Y,3))+dxfPair(20,fmtNum(v.X,3))+dxfPair(30,0);d+=dxfPair(0,'TEXT')+dxfPair(8,'VERTEX_LABEL')+dxfPair(10,fmtNum(v.Y+h*0.25,3))+dxfPair(20,fmtNum(v.X+h*0.25,3))+dxfPair(30,0)+dxfPair(40,fmtNum(h*0.75,3))+dxfPair(1,`${p.center.name}-${v.vertex}`)+dxfPair(7,'STANDARD');});});d+=dxfPair(0,'ENDSEC')+dxfPair(0,'EOF');return d;}
+function exportDxf(){try{const dxf=buildDxf();downloadBlob(new Blob([dxf],{type:'application/dxf;charset=utf-8'}),`${safePrefix()}_含编号.dxf`);showToast('DXF已生成，CAD中可直接看到编号');}catch(e){showToast(e.message);}}
+
+function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.classList.remove('show'),2400);}
+function saveState(){try{localStorage.setItem('shape_tool_state_v16',JSON.stringify({settings:{zoneType:$('zoneType').value,shapeType:$('shapeType').value,distance:$('distance').value,distanceType:$('distanceType').value,startAzimuth:$('startAzimuth').value,altitude:$('altitude').value,filePrefix:$('filePrefix').value,shpCrs:$('shpCrs').value,dxfTextHeight:$('dxfTextHeight').value,exportCenterLabels:$('exportCenterLabels').checked,exportVertexLabels:$('exportVertexLabels').checked,csvSeparator:$('csvSeparator').checked,csvClose:$('csvClose').checked},rows:getInputRows()}));}catch(e){}}
+function restoreState(){try{let s=JSON.parse(localStorage.getItem('shape_tool_state_v16')||'null');if(!s)s=JSON.parse(localStorage.getItem('shape_tool_state_v15')||'null');if(!s)s=JSON.parse(localStorage.getItem('shape_tool_state_v14')||'null');if(!s)s=JSON.parse(localStorage.getItem('shape_tool_state_v13')||'null');if(!s)s=JSON.parse(localStorage.getItem('shape_tool_state_v12')||'null');if(!s){const old=JSON.parse(localStorage.getItem('octagon_tool_state')||'null');if(old)s={settings:{...old.settings,shapeType:'八边形',filePrefix:old.settings?.filePrefix||'批量图形坐标'},rows:old.rows};}if(!s)return false;Object.entries(s.settings||{}).forEach(([k,v])=>{const el=$(k);if(!el)return;if(el.type==='checkbox')el.checked=!!v;else el.value=v;});$('inputTable').tBodies[0].innerHTML='';addRows(Math.max(12,(s.rows||[]).length),s.rows||[]);return true;}catch(e){return false;}}
+$('addRowsBtn').onclick=()=>addRows(10);$('sampleBtn').onclick=loadSample;$('clearBtn').onclick=clearAll;$('calculateBtn').onclick=calculate;$('exportDecimalBtn').onclick=()=>exportCsv('decimal');$('exportCgcsBtn').onclick=()=>exportCsv('cgcs');$('exportKmzBtn').onclick=exportKmz;$('exportShpBtn').onclick=exportShp;$('exportDxfBtn').onclick=exportDxf;$('fileInput').onchange=e=>{if(e.target.files[0])importTextFile(e.target.files[0]);e.target.value='';};$('geoFileInput').onchange=async e=>{if(e.target.files[0])await importGeoFile(e.target.files[0]);e.target.value='';};$('inputTable').addEventListener('paste',handlePaste);setupDragImport();window.addEventListener('resize',()=>{if(polygons.length)drawPreview();});
+$('shapeType').addEventListener('change',()=>{updateShapeUI(true);saveState();});
+document.querySelectorAll('#zoneType,#distance,#distanceType,#startAzimuth,#altitude,#shpCrs,#dxfTextHeight,#filePrefix,#exportCenterLabels,#exportVertexLabels,#csvSeparator,#csvClose').forEach(el=>el.addEventListener('change',saveState));
+if(!restoreState())addRows(12);updateShapeUI(false);drawPreview();
+</script>
+</body></html>
